@@ -18,7 +18,7 @@ model = dict(
         num_outs=5),
     bbox_head=dict(
         type='SOLOv2Head',
-        num_classes=81,
+        num_classes=3,
         in_channels=256,
         stacked_convs=2,
         seg_feat_channels=256,
@@ -128,7 +128,7 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 36
+total_epochs = 50
 device_ids = range(8)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
