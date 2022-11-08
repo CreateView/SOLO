@@ -12,7 +12,7 @@ build-docker:
 	
 .PHONY: run-docker
 run-docker:
-	docker run --gpus all --rm --name solo-prod -v $${PWD}/work_dirs:/SOLO/work_dirs solo-prod:latest
+	docker run --gpus all --rm --shm-size 8G --name solo-prod -v $${PWD}/work_dirs:/SOLO/work_dirs solo-prod:latest
 	
 .PHONY: stop-rm
 stop-rm:	
