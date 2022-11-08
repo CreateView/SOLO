@@ -118,7 +118,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=0.01,
     step=[27, 33])
-checkpoint_config = dict(interval=1)
+checkpoint_config = dict(interval=10)
 # yapf:disable
 log_config = dict(
     interval=50,
@@ -128,7 +128,7 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 50
+total_epochs = 500
 device_ids = range(8)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
