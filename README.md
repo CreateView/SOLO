@@ -1,10 +1,9 @@
 # SOLO: Segmenting Objects by Locations
-This project hosts the code for implementing the SOLO algorithms for instance segmentation.
 ## Docker training/testing environment
 ### Training recipe 
 - Build base container `make build-docker-base`
 - Copy new data in COCO format to `data/new_dir`.
-- In one of the config files, e.g. `configs/fish_solov2_light_448_r18_fpn_8gpu_3x.py` remember to control fields: `data`, `num_classes`, total_epochs`, `checkpoint_config` (frequency of checkpoint save), `imgs_per_gpu` (batching)
+- In one of the config files, e.g. `configs/fish_solov2_light_448_r18_fpn_8gpu_3x.py` remember to control fields: `data`, `num_classes`, `total_epochs`, `checkpoint_config` (frequency of checkpoint save), `imgs_per_gpu` (batching)
 - Check for correct config file, checkpoint-resume-from option in training command in `docker/Dockerfile.train`
 - Build training container `make build-docker-train`
 - Run training in docker `make run-docker-train`
@@ -13,6 +12,9 @@ This is unconfirmed because of the 'CUDA out of memory' issue that I got.
 - Build base container `make build-docker-base` (if not already built before training)
 - Check for correct config file in testing command in `docker/Dockerfile.test`
 - Run training in docker `make run-docker-test`
+
+# SOLO description
+This project hosts the code for implementing the SOLO algorithms for instance segmentation.
 
 > [**SOLO: Segmenting Objects by Locations**](https://arxiv.org/abs/1912.04488),            
 > Xinlong Wang, Tao Kong, Chunhua Shen, Yuning Jiang, Lei Li    
