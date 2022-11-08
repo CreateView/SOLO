@@ -1,0 +1,9 @@
+FROM solo:latest
+
+COPY . .
+
+CMD ["python3", "tools/test_ins.py", "configs/fish_solov2_light_448_r18_fpn_8gpu_3x_81.py", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/epoch_3.pth", "--show", "--out", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/output.pkl", "--eval", "segm", "--json_out", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/output"]
+
+#CMD ["python3", "tools/test.py", "configs/fish_solov2_light_448_r18_fpn_8gpu_3x_81.py", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/epoch_3.pth", "--show", "--out", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/output.pkl", "--eval", "segm", "--json_out", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/output"]
+
+#CMD ["python3", "tools/test_ins_vis.py", "configs/fish_solov2_light_448_r18_fpn_8gpu_3x_81.py", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/epoch_3.pth", "--show", "--eval", "segm", "--json_out", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/output", "--save_dir", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x"]
