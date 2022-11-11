@@ -1,0 +1,12 @@
+FROM solo:latest
+
+COPY . .
+
+##### LIGHT MODELS #####
+#CMD ["python3", "tools/train.py", "configs/fish_solov2_light_448_r18_fpn_8gpu_3x.py", "--resume_from", "work_dirs/solov2_light_release_r18_fpn_8gpu_3x/epoch_50.pth"]
+#CMD ["python3", "tools/train.py", "configs/fish_solov2_light_448_r18_fpn_8gpu_3x.py", "--autoscale-lr"]
+
+##### HEAVY MODELS #####
+#CMD ["python3", "tools/train.py", "configs/fish_solov2_r50_fpn_8gpu_3x.py"]
+#CMD ["python3", "tools/train.py", "configs/fish_solov2_r50_fpn_8gpu_3x_v2.py", "--autoscale-lr"]
+CMD ["python3", "tools/train.py", "configs/fish_solov2_r50_fpn_8gpu_3x_v2.py", "--autoscale-lr", "--resume_from", "work_dirs/solov2_release_r50_fpn_8gpu_3x_v2/latest.pth"]

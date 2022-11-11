@@ -1,32 +1,31 @@
 # model settings
 model = dict(
     type='SOLOv2',
-    #pretrained='torchvision://resnet18',
-    pretrained=None,
+    pretrained=None, #pretrained='torchvision://resnet50',
     backbone=dict(
         type='ResNet',
-        depth=18,
+        depth=50,
         num_stages=4,
         out_indices=(0, 1, 2, 3), # C2, C3, C4, C5
         frozen_stages=1,
         style='pytorch'),
     neck=dict(
         type='FPN',
-        in_channels=[64, 128, 256, 512],
+        in_channels=[256, 512, 1024, 2048],
         out_channels=256,
         start_level=0,
         num_outs=5),
     bbox_head=dict(
         type='SOLOv2Head',
-        num_classes=3,
+        num_classes=4,
         in_channels=256,
-        stacked_convs=2,
-        seg_feat_channels=256,
+        stacked_convs=4,
+        seg_feat_channels=512,
         strides=[8, 8, 16, 32, 32],
-        scale_ranges=((1, 56), (28, 112), (56, 224), (112, 448), (224, 896)),
+        scale_ranges=((1, 96), (48, 192), (96, 384), (192, 768), (384, 2048)),
         sigma=0.2,
         num_grids=[40, 36, 24, 16, 12],
-        ins_out_channels=128,
+        ins_out_channels=256,
         loss_ins=dict(
             type='DiceLoss',
             use_sigmoid=True,
@@ -43,21 +42,21 @@ model = dict(
             out_channels=128,
             start_level=0,
             end_level=3,
-            num_classes=128,
+            num_classes=256,
             norm_cfg=dict(type='GN', num_groups=32, requires_grad=True)),
     )
 # training and testing settings
 train_cfg = dict()
 test_cfg = dict(
-    nms_pre=500,
+    nms_pre=500, # original nms_pre=500. For test  = 70
     score_thr=0.1,
     mask_thr=0.5,
     update_thr=0.05,
     kernel='gaussian',  # gaussian/linear
     sigma=2.0,
-    max_per_img=100)
+    max_per_img=100) #max_per_img=100, for test = 30
 # dataset settings
-dataset_type = 'CocoDataset'
+dataset_type = 'MyDataset'
 data_root = 'data/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
@@ -65,8 +64,8 @@ train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True, with_mask=True),
     dict(type='Resize',
-         img_scale=[(768, 512), (768, 480), (768, 448),
-                   (768, 416), (768, 384), (768, 352)],
+         img_scale=[(1333, 800), (1333, 768), (1333, 736),
+                    (1333, 704), (1333, 672), (1333, 640)],
          multiscale_mode='value',
          keep_ratio=True),
     dict(type='RandomFlip', flip_ratio=0.5),
@@ -79,7 +78,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(768, 448),
+        img_scale=(1333, 800),
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
@@ -91,7 +90,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    imgs_per_gpu=4,
+    imgs_per_gpu=2,
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
@@ -118,10 +117,10 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=0.01,
     step=[27, 33])
-checkpoint_config = dict(interval=10)
+checkpoint_config = dict(interval=50)
 # yapf:disable
 log_config = dict(
-    interval=50,
+    interval=5,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook')
@@ -132,7 +131,7 @@ total_epochs = 500
 device_ids = range(8)
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/solov2_light_release_r18_fpn_8gpu_3x'
-load_from = 'checkpoints/SOLOv2_LIGHT_448_R18_3x.pth'
+work_dir = './work_dirs/solov2_release_r50_fpn_8gpu_3x_v2'
+load_from = 'checkpoints/SOLOv2_R50_3x.pth'
 resume_from = None
 workflow = [('train', 1)]
