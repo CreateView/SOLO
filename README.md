@@ -1,6 +1,25 @@
+# SOLO: CreateView's training & testing environment
+## Docker training/testing environment
+### Training recipe 
+- Build base container ```make build-docker-base```
+- Download one of pre-trained models (SOLOv2_Light_448_R18_3x or SOLOv2_R50_3x): ```make download-model-light``` or ```make download-model-heavy```
+- Copy new data in COCO format to `data/new_dir`.
+- In one of the config files, e.g. `configs/fish_solov2_light_448_r18_fpn_8gpu_3x.py` remember to control fields: `data`, `num_classes` (real number of classes + 1), `total_epochs`, `checkpoint_config` (frequency of checkpoint save), `imgs_per_gpu` (batching)
+- Use `fish_solov2_r50_fpn_8gpu_3x_v2.py` as a template for a custom dataset. NB! In this temlate custom dataset classes are defined in `mmdet/datasets/my_dataset.py`
+- Check for correct config file, checkpoint-resume-from option (if applicable) in `docker/Dockerfile.train`
+- Build training container ```make build-docker-train```
+- Run training in docker ```make run-docker-train```
 
-# SOLO: Segmenting Objects by Locations
+### Interaction after training (testing, interference)
+It is assumed that training image is built (`docker images` command shows solo-train image)
+- Run ```run-docker-interact```
+- This gives you access to bash, where you can interact with the container
+- You may want to have access to a text editor. If so, just install e.g. Nano: ```apt update && apt install nano```
+- Remember to place all outputs in `work_dirs` to get local access
+- To run inference use script `tools/inference_batch_kjz_no_args.py`
+- To test model use script `tools/test_ins.py`. Here you might get 'CUDA out of memory' issue if running on high res images. The trick is to reduce `nms_pre` and/or `max_per_img`. NB! This unfortunately reduces the inference and test quality.
 
+# SOLO description
 This project hosts the code for implementing the SOLO algorithms for instance segmentation.
 
 > [**SOLO: Segmenting Objects by Locations**](https://arxiv.org/abs/1912.04488),            

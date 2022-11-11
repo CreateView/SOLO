@@ -1,10 +1,10 @@
 .PHONY: download-model-light
-download-model:
+download-model-light:
 	wget -O checkpoints/SOLOv2_LIGHT_448_R18_3x.pth 'https://cloudstor.aarnet.edu.au/plus/s/HwHys05haPvNyAY/download'
 	
 .PHONY: download-model-heavy
-download-model:
-	wget -O checkpoints/SOLOv2_R50_3x.pth 'https://cloudstor.aarnet.edu.au/plus/s/DvjgeaPCarKZoVL/download'
+download-model-heavy:
+	wget -O checkpoints/SOLOv2_R50_3x.pth 'https://cloudstor.aarnet.edu.au/plus/s/nkxN1FipqkbfoKX/download'
 
 .PHONY: build-docker-base
 build-docker-base:
@@ -21,5 +21,3 @@ run-docker-train:
 .PHONY: run-docker-interact
 run-docker-interact:
 	docker run --gpus all -it -v $${PWD}/work_dirs:/SOLO/work_dirs solo-train:latest bash
-	
-# If text editor needed then: apt update && apt install nano. Remember to place all outputs in work_dirs to get local access
